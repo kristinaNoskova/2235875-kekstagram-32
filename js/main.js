@@ -6,26 +6,26 @@ function getRandomInteger(min, max) {
   return Math.floor(result);
 }
 
-function createRandomNumber(min, max) {
-  const generatedValue = [];
+function getUniqRandomGenerator(min, max) {
+  const generatedValues = [];
 
   return function () {
     let currentValue = getRandomInteger(min, max);
     for (let i = min; i <= max; i++) {
-      if (generatedValue.includes(currentValue)) {
+      if (generatedValues.includes(currentValue)) {
         currentValue = getRandomInteger(min, max);
       } else {
         break;
       }
     }
-    generatedValue.push(currentValue);
+    generatedValues.push(currentValue);
     return currentValue;
   };
 }
 
-const likes = createRandomNumber(15, 200);
-const avatar = createRandomNumber(1, 6);
-const commentId = createRandomNumber(0, Math.floor(Math.random() * 200));
+const getLikesCount = getUniqRandomGenerator(15, 200);
+const avatar = getUniqRandomGenerator(1, 6);
+const commentId = getUniqRandomGenerator(0, 200);
 
 function createSerialNumber(min, max) {
   let serialNumber = 0;
@@ -38,12 +38,12 @@ function createSerialNumber(min, max) {
   };
 }
 
-const currentNumber = createSerialNumber(1, 25);
-const currenUrlId = createSerialNumber(1, 25);
+const getCurrentNumber = createSerialNumber(1, 25);
+const getCurrenUrlId = createSerialNumber(1, 25);
 
 
 function getUrl() {
-  return `photos/${currenUrlId()}.jpg`;
+  return `photos/${getCurrenUrlId()}.jpg`;
 }
 
 function getAvatar() {
@@ -56,8 +56,8 @@ const textMessages = ['Всё отлично!', 'В целом всё непло
 
 
 function getArrayElement(array) {
-  const randomItem = array[Math.floor(Math.random() * array.length)];
-  return randomItem;
+  const randomItems = array[getRandomInteger(0, array.length)];
+  return randomItems;
 }
 
 const describesComment = () => ({
@@ -69,27 +69,25 @@ const describesComment = () => ({
   }
 });
 
-const arrayWithComment = Array.from({ length: 30 }, describesComment);
+const arrayWithComments = Array.from({ length: 30 }, describesComment);
 
 function getRandomComment(array) {
   const mixedArray = array.sort(() => Math.random() - 0.5);
-  const randomNumber = Math.floor(Math.random() * 30);
+  const randomNumber = getRandomInteger(0, 30);
   const randomNumberArray = mixedArray.slice(randomNumber);
   return randomNumberArray;
-
 }
 
 const describesPhoto = () => ({
   return: {
-    id: currentNumber(),
+    id: getCurrentNumber(),
     url: getUrl(),
     description: getArrayElement(descrPhotos),
-    likes: likes(),
-    comments: getRandomComment(arrayWithComment),
+    likes: getLikesCount(),
+    comments: getRandomComment(arrayWithComments),
   }
 });
 
+const arrayWithPhotos = Array.from({ length: 25 }, describesPhoto);
 
-const arrayWithPhoto = Array.from({ length: 25 }, describesPhoto);
-
-console.log(arrayWithPhoto);
+console.log(arrayWithPhotos);
