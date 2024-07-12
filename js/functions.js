@@ -45,7 +45,8 @@ const convertToTime = (timeString) => {
 };
 
 const calculatesDurationMeeting = (startWorkingDay, endWorkingDay, startMeeting, durationMeeting) => {
-  const date = new Date(`2024-07-09T${convertToTime(startMeeting)}`);
+  const anyDate = '2024-07-09T';
+  const date = new Date(anyDate + convertToTime(startMeeting));
   let endMeetingTime = date.setMinutes(date.getMinutes() + durationMeeting);
   endMeetingTime = date.toLocaleTimeString().slice(0, 5);
 
@@ -54,9 +55,8 @@ const calculatesDurationMeeting = (startWorkingDay, endWorkingDay, startMeeting,
   }
   return false;
 };
-
-console.log('1', calculatesDurationMeeting('08:00', '17:30', '14:00', 90)); // true
-console.log('2', calculatesDurationMeeting('8:0', '10:0', '07:00', 120)); // false
-console.log('2', calculatesDurationMeeting('08:00', '14:30', '14:00', 90)); // false
-console.log('4', calculatesDurationMeeting('08:00', '14:30', '14:00', 90)); // false
-console.log('5', calculatesDurationMeeting('8:00', '17:30', '8:0', 900)); // false
+calculatesDurationMeeting('08:00', '17:30', '14:00', 90); // true
+calculatesDurationMeeting('8:0', '10:0', '07:00', 120); // false
+calculatesDurationMeeting('08:00', '14:30', '14:00', 90); // false
+calculatesDurationMeeting('08:00', '14:30', '14:00', 90); // false
+calculatesDurationMeeting('8:00', '17:30', '8:0', 900); // false
