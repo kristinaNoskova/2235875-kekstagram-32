@@ -1,2 +1,2 @@
-import { picturesList } from './thumbnail-photos.js';
-console.log(picturesList);
+import './modal.js';
+import './modal-image.js';
