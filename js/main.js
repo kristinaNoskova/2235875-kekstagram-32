@@ -1,3 +1,2 @@
-import { getArrayWithPhotos } from './data.js';
-
-getArrayWithPhotos();
+import { picturesList } from './thumbnail-photos.js';
+console.log(picturesList);
