@@ -29,4 +29,4 @@ const describesPhoto = () => ({
 
 const getArrayWithPhotos = () => Array.from({ length: 25 }, describesPhoto);
 
-export { getArrayWithPhotos };
+export { getArrayWithPhotos, describesComment };

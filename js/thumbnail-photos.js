@@ -1,24 +1,29 @@
 import { getArrayWithPhotos } from './data.js';
 
-const picturesList = document.querySelector('.pictures');
+const pictures = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content;
-const pictureElement = pictureTemplate.querySelector('.picture');
+const picture = pictureTemplate.querySelector('.picture');
+const bigPicture = document.querySelector('.big-picture');
+
+const socialComments = bigPicture.querySelector('.social__comments');
 
 const fragment = document.createDocumentFragment();
+const socialCommentsFragment = document.createDocumentFragment();
 
-const datafromPhoto = getArrayWithPhotos();
+const dataForPhoto = getArrayWithPhotos();
 
-datafromPhoto.forEach(({ url, description, likes, comments }) => {
-  const pictureElementCopy = pictureElement.cloneNode(true);
-  const image = pictureElementCopy.querySelector('.picture__img');
+dataForPhoto.forEach(({ url, description, likes, comments }) => {
+  const pictureCopy = picture.cloneNode(true);
+  const image = pictureCopy.querySelector('.picture__img');
   image.src = url;
   image.alt = description;
-  pictureElementCopy.querySelector('.picture__comments').textContent = comments.length;
-  pictureElementCopy.querySelector('.picture__likes').textContent = likes;
-  fragment.append(pictureElementCopy);
+  pictureCopy.querySelector('.picture__comments').textContent = comments.length;
+  pictureCopy.querySelector('.picture__likes').textContent = likes;
+  pictureCopy.comments = comments;
+  fragment.append(pictureCopy);
 });
 
-picturesList.append(fragment);
+pictures.append(fragment);
 
-export { picturesList };
+export { pictures };
 

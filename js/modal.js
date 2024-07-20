@@ -15,25 +15,28 @@ const onDocumentKeydown = (evt) => {
 };
 
 const modalOpen = (evt) => {
-  if (evt.target.closest('.picture')) {
-    evt.preventDefault();
-    bigPicture.classList.remove('hidden');
-    document.body.classList.add('modal-open');
-    commentCount.classList.add('hidden');
-    commentsLoader.classList.add('hidden');
-    drawBigPicture(evt);
-
-    document.addEventListener('keydown', onDocumentKeydown);
+  if (!evt.target.closest('.picture')) {
+    return;
   }
+  evt.preventDefault();
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  commentCount.classList.add('hidden');
+  commentsLoader.classList.add('hidden');
+  drawBigPicture(evt);
+
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const modalClose = () => {
+function modalClose() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onDocumentKeydown);
-};
+}
 
-picturesList.addEventListener('click', modalOpen);
+const onModalOpen = () => picturesList.addEventListener('click', modalOpen);
+onModalOpen();
 
-bigPictureCancel.addEventListener('click', modalClose);
+const onModalClose = () => bigPictureCancel.addEventListener('click', modalClose);
+onModalClose();
