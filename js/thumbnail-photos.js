@@ -3,12 +3,8 @@ import { getArrayWithPhotos } from './data.js';
 const pictures = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content;
 const picture = pictureTemplate.querySelector('.picture');
-const bigPicture = document.querySelector('.big-picture');
-
-const socialComments = bigPicture.querySelector('.social__comments');
 
 const fragment = document.createDocumentFragment();
-const socialCommentsFragment = document.createDocumentFragment();
 
 const dataForPhoto = getArrayWithPhotos();
 
