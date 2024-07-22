@@ -20,4 +20,6 @@ const createSerialNumber = () => {
   };
 };
 
-export { getRandomInteger, getArrayElement, createSerialNumber };
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export { getRandomInteger, getArrayElement, createSerialNumber, isEscapeKey };
