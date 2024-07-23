@@ -1,2 +1,3 @@
+import './thumbnail-photos.js';
 import './modal.js';
-import './modal-image.js';
+import './сomments.js';
