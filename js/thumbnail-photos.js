@@ -8,18 +8,19 @@ const fragment = document.createDocumentFragment();
 
 const dataForPhoto = getArrayWithPhotos();
 
-dataForPhoto.forEach(({ url, description, likes, comments }) => {
+dataForPhoto.forEach(({ url, description, likes, comments, id }) => {
   const pictureCopy = picture.cloneNode(true);
   const image = pictureCopy.querySelector('.picture__img');
   image.src = url;
   image.alt = description;
   pictureCopy.querySelector('.picture__comments').textContent = comments.length;
   pictureCopy.querySelector('.picture__likes').textContent = likes;
-  pictureCopy.comments = comments;
+  // pictureCopy.comments = comments;
+  pictureCopy.dataset.id = id;
   fragment.append(pictureCopy);
 });
 
 pictures.append(fragment);
 
-export { pictures };
+export { pictures, dataForPhoto };
 
