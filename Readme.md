@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
-* Студент: [Кристина Носкова](https://up.htmlacademy.ru/javascript/32/user/2235875).
-* Наставник: [Алексей Балесный](https://htmlacademy.ru/profile/id221665).
+- Студент: [Кристина Носкова](https://up.htmlacademy.ru/javascript/32/user/2235875).
+- Наставник:
 
 ---
 
