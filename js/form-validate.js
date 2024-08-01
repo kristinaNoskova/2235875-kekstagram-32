@@ -62,10 +62,12 @@ pristine.addValidator(textHashtagsElement, validateHashtags, TextError.ERROR_INV
 pristine.addValidator(textHashtagsElement, checksLengthArray, TextError.ERROR_LENGTH, 3, true);
 pristine.addValidator(textHashtagsElement, checksRepeatArray, TextError.ERROR_REPEAT, 2, true);
 
+// Если валидация проходит, разрешаем отправку формы
 imgFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  pristine.validate();
-
+  if (pristine.validate()) {
+    evt.target.submit();
+  }
 });
 
 // Обработчики для открытия/закрытия формы
