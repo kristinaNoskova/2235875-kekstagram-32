@@ -1,41 +1,40 @@
 import { isEscapeKey } from './util.js';
 import { renderPhoto, onMoreButtonClick } from './render-photo.js';
 
-const bigPicture = document.querySelector('.big-picture');
-const picturesList = document.querySelector('.pictures');
-const bigPictureCancel = document.querySelector('.big-picture__cancel');
-const commentsLoader = bigPicture.querySelector('.comments-loader');
+const bigPictureElement = document.querySelector('.big-picture');
+const picturesListElement = document.querySelector('.pictures');
+const bigPictureCancelElement = document.querySelector('.big-picture__cancel');
+const commentsLoaderElement = bigPictureElement.querySelector('.comments-loader');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    onModalClose();
+    onModalCloseClick();
   }
 };
 
-const onModalOpen = (evt) => {
-  evt.preventDefault();
+const onModalOpenClick = (evt) => {
   const currentPicture = evt.target.closest('.picture');
 
   if (!currentPicture) {
     return;
   }
 
-  bigPicture.classList.remove('hidden');
+  bigPictureElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
   renderPhoto(currentPicture);
   document.addEventListener('keydown', onDocumentKeydown);
-  commentsLoader.addEventListener('click', onMoreButtonClick);
+  commentsLoaderElement.addEventListener('click', onMoreButtonClick);
 };
 
-function onModalClose() {
-  bigPicture.classList.add('hidden');
+function onModalCloseClick() {
+  bigPictureElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onDocumentKeydown);
-  commentsLoader.removeEventListener('click', onMoreButtonClick);
+  commentsLoaderElement.removeEventListener('click', onMoreButtonClick);
 }
 
-picturesList.addEventListener('click', onModalOpen);
+picturesListElement.addEventListener('click', onModalOpenClick);
 
-bigPictureCancel.addEventListener('click', onModalClose);
+bigPictureCancelElement.addEventListener('click', onModalCloseClick);

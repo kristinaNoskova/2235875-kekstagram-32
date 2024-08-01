@@ -1,17 +1,17 @@
 import { dataForPhoto } from './thumbnail-photos';
-const ADD_TO_COMMENTS = 5;
+const COUNT_COMMENT = 5;
 
-const bigPicture = document.querySelector('.big-picture');
-const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
-const likesCount = bigPicture.querySelector('.likes-count');
-const socialCaption = bigPicture.querySelector('.social__caption');
-const socialComments = bigPicture.querySelector('.social__comments');
-const commentCount = bigPicture.querySelector('.social__comment-count');
-const commentTotalCount = bigPicture.querySelector('.social__comment-total-count');
-const commentShownCount = commentCount.querySelector('.social__comment-shown-count');
-const commentsLoader = bigPicture.querySelector('.comments-loader');
+const bigPictureElement = document.querySelector('.big-picture');
+const bigPictureImgElement = bigPictureElement.querySelector('.big-picture__img img');
+const likesCountElement = bigPictureElement.querySelector('.likes-count');
+const socialCaptionElement = bigPictureElement.querySelector('.social__caption');
+const socialCommentsElement = bigPictureElement.querySelector('.social__comments');
+const commentCountElement = bigPictureElement.querySelector('.social__comment-count');
+const commentTotalCountElement = bigPictureElement.querySelector('.social__comment-total-count');
+const commentShownCountElement = commentCountElement.querySelector('.social__comment-shown-count');
+const commentsLoaderElement = bigPictureElement.querySelector('.comments-loader');
 let photoComments = [];
-let countComments = 0;
+let currentComment = 0;
 
 const socialCommentsFragment = document.createDocumentFragment();
 
@@ -40,34 +40,39 @@ const renderComments = (comment) => {
   });
 };
 
-const renderPhoto = (currentPictureElement) => {
-  countComments = 0;
-  socialComments.innerHTML = '';
-  const pictureId = getIdPhoto(currentPictureElement);
-  bigPictureImg.src = pictureId.url;
-  bigPictureImg.alt = pictureId.description;
-  likesCount.textContent = pictureId.likes;
-  commentTotalCount.textContent = pictureId.comments.length;
-  socialCaption.textContent = pictureId.description;
-  photoComments = pictureId.comments;
+const displaysInitialComments = () => {
   onMoreButtonClick();
 };
 
+const renderPhoto = (currentPictureElement) => {
+  currentComment = 0;
+  socialCommentsElement.innerHTML = '';
+  const pictureId = getIdPhoto(currentPictureElement);
+  bigPictureImgElement.src = pictureId.url;
+  bigPictureImgElement.alt = pictureId.description;
+  likesCountElement.textContent = pictureId.likes;
+  commentTotalCountElement.textContent = pictureId.comments.length;
+  socialCaptionElement.textContent = pictureId.description;
+  photoComments = pictureId.comments;
+  displaysInitialComments();
+};
+
 function onMoreButtonClick() {
-  const commentsChunk = photoComments.slice(countComments, countComments + ADD_TO_COMMENTS);
+  const commentsSlice = photoComments.slice(currentComment, currentComment + COUNT_COMMENT);
 
-  if (commentsChunk.length > 0) {
-    renderComments(commentsChunk);
-    socialComments.append(socialCommentsFragment);
-    commentsLoader.classList.remove('hidden');
+  if (commentsSlice.length > 0) {
+    renderComments(commentsSlice);
+    socialCommentsElement.append(socialCommentsFragment);
+    commentsLoaderElement.classList.remove('hidden');
 
-    countComments += commentsChunk.length;
-    commentShownCount.textContent = countComments;
+    currentComment += commentsSlice.length;
+    commentShownCountElement.textContent = currentComment;
   }
 
-  if (countComments >= photoComments.length) {
-    commentsLoader.classList.add('hidden');
+  if (currentComment >= photoComments.length) {
+    commentsLoaderElement.classList.add('hidden');
   }
 }
+
 export { renderPhoto, onMoreButtonClick };
 
