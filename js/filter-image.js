@@ -1,6 +1,3 @@
-const STEP_SIZE = 25;
-const MIN_VALUE = 25;
-const MAX_VALUE = 100;
 const NamesModifiers = {
   NONE: 'none',
   CHROME: 'chrome',
@@ -19,11 +16,7 @@ const Effects = {
   BRIGHTNESS: 'brightness'
 };
 
-const picturesListElement = document.querySelector('.pictures');
-const imgFormElement = picturesListElement.querySelector('.img-upload__form');
-const controlSmallerElement = imgFormElement.querySelector('.scale__control--smaller');
-const controlBiggerElement = imgFormElement.querySelector('.scale__control--bigger');
-const controlValueElement = imgFormElement.querySelector('.scale__control--value');
+const imgFormElement = document.querySelector('.img-upload__form');
 const imgPreviewElement = imgFormElement.querySelector('.img-upload__preview img');
 
 const effectsListElement = imgFormElement.querySelector('.effects__list');
@@ -31,30 +24,6 @@ const imgEffectLevelElement = imgFormElement.querySelector('.img-upload__effect-
 const effectLevelValueElement = imgEffectLevelElement.querySelector('.effect-level__value');
 const effectSliderElement = imgEffectLevelElement.querySelector('.effect-level__slider');
 let filterName;
-
-const setScaleValue = (value) => {
-  const scaleValue = value / 100;
-  imgPreviewElement.style.transform = `scale(${scaleValue})`;
-  controlValueElement.value = `${value}%`;
-};
-
-const updateScaleValue = () => {
-  let valueToNumber = controlValueElement.value.slice(0, -1);
-
-  controlSmallerElement.addEventListener('click', () => {
-    if (valueToNumber > MIN_VALUE) {
-      valueToNumber -= STEP_SIZE;
-      setScaleValue(valueToNumber);
-    }
-  });
-
-  controlBiggerElement.addEventListener('click', () => {
-    if (valueToNumber < MAX_VALUE) {
-      valueToNumber += STEP_SIZE;
-      setScaleValue(valueToNumber);
-    }
-  });
-};
 
 effectLevelValueElement.value = 1;
 imgEffectLevelElement.classList.add('hidden');
@@ -69,12 +38,15 @@ noUiSlider.create(effectSliderElement, {
   connect: 'lower'
 });
 
+// Проверяем наличие модификатра с нужным эффектом
 const checkPresenceClass = (effects, currentPreview) => currentPreview.classList.contains(`effects__preview--${effects}`);
 
+// Добавляем CSS-стиль изображению
 const getStyleFilter = (value) => {
   imgPreviewElement.style.filter = value;
 };
 
+// Записываем свойства в переменную, в зависимости от класса модификатора у текущего элемента
 const setImageEffect = (currentPreview) => {
   if (checkPresenceClass(NamesModifiers.CHROME, currentPreview)) {
     filterName = Effects.GRAYSCALE;
@@ -92,6 +64,7 @@ const setImageEffect = (currentPreview) => {
   }
 };
 
+// Подставляем значения слайдера, в зависимости от фльтра добавляем единицы измерения
 effectSliderElement.noUiSlider.on('update', () => {
   effectLevelValueElement.value = effectSliderElement.noUiSlider.get();
   if (filterName === Effects.INVERT) {
@@ -105,11 +78,12 @@ effectSliderElement.noUiSlider.on('update', () => {
   }
 });
 
+// Меняем параметры слайдера в зависимости от значений свойства filter.
 const setEffectOtherPram = (currentPreview) => {
   if (checkPresenceClass(NamesModifiers.PHOBOS, currentPreview)) {
     effectSliderElement.noUiSlider.updateOptions({
       range: {
-        min: 1,
+        min: 0,
         max: 3
       },
       start: 3,
@@ -145,6 +119,7 @@ const setEffectOtherPram = (currentPreview) => {
   }
 };
 
+// Обработчик клика превью с эффектами
 const onFilterPreviewClick = (evt) => {
   const currentPreview = evt.target.closest('.effects__preview');
 
@@ -160,5 +135,3 @@ const onFilterPreviewClick = (evt) => {
 };
 
 effectsListElement.addEventListener('click', onFilterPreviewClick);
-
-export { updateScaleValue };
