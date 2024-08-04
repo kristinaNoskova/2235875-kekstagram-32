@@ -28,6 +28,12 @@ let filterName;
 effectLevelValueElement.value = 1;
 imgEffectLevelElement.classList.add('hidden');
 
+const imgPreviewReset = () => {
+  imgPreviewElement.style.filter = 'none';
+  imgEffectLevelElement.classList.add('hidden');
+  imgPreviewElement.style.transform = 'scale(100%)';
+};
+
 noUiSlider.create(effectSliderElement, {
   range: {
     min: 0,
@@ -135,3 +141,5 @@ const onFilterPreviewClick = (evt) => {
 };
 
 effectsListElement.addEventListener('click', onFilterPreviewClick);
+
+export { imgPreviewReset };
