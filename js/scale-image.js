@@ -1,6 +1,7 @@
 const STEP_SIZE = 25;
 const MIN_VALUE = 25;
 const MAX_VALUE = 100;
+const VALUE_DIVISOR = 100;
 
 const imgFormElement = document.querySelector('.img-upload__form');
 const controlSmallerElement = imgFormElement.querySelector('.scale__control--smaller');
@@ -9,7 +10,7 @@ const controlValueElement = imgFormElement.querySelector('.scale__control--value
 const imgPreviewElement = imgFormElement.querySelector('.img-upload__preview img');
 
 const setScaleValue = (value) => {
-  const scaleValue = value / 100;
+  const scaleValue = value / VALUE_DIVISOR;
   imgPreviewElement.style.transform = `scale(${scaleValue})`;
   controlValueElement.value = `${value}%`;
 };

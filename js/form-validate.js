@@ -1,5 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { imgPreviewReset } from './filter-image.js';
+import { resetImgPreview } from './filter-image.js';
 
 const HASHTAG_REGXP = /^#[a-zя-яё0-9]{1,19}$/i;
 const HASHTAG_COUNT = 5;
@@ -87,7 +87,7 @@ const onUploadOverlayChange = () => {
 function onUploadOverlayClose() {
   imgOverlayElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  imgPreviewReset();
+  resetImgPreview();
   imgFormElement.reset();
   pristine.reset();
   document.removeEventListener('keydown', onDocumentKeydown);

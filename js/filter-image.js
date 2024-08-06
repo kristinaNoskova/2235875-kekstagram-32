@@ -1,4 +1,4 @@
-const NamesModifiers = {
+const NamesValues = {
   NONE: 'none',
   CHROME: 'chrome',
   SEPIA: 'sepia',
@@ -16,6 +16,57 @@ const Effects = {
   BRIGHTNESS: 'brightness'
 };
 
+const filterData = {
+  phobos: {
+    range: {
+      min: 0,
+      max: 3
+    },
+    start: 3,
+    step: 0.1
+  },
+  heat: {
+    range: {
+      min: 1,
+      max: 3,
+    },
+    start: 3,
+    step: 0.1
+  },
+  marvin: {
+    range: {
+      min: 0,
+      max: 100,
+    },
+    start: 100,
+    step: 1
+  },
+  chrome: {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    step: 0.1,
+    start: 1,
+  },
+  sepia: {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    step: 0.1,
+    start: 1,
+  },
+  none: {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    step: 0.1,
+    start: 1,
+  }
+};
+
 const imgFormElement = document.querySelector('.img-upload__form');
 const imgPreviewElement = imgFormElement.querySelector('.img-upload__preview img');
 
@@ -28,7 +79,7 @@ let filterName;
 effectLevelValueElement.value = 1;
 imgEffectLevelElement.classList.add('hidden');
 
-const imgPreviewReset = () => {
+const resetImgPreview = () => {
   imgPreviewElement.style.filter = 'none';
   imgEffectLevelElement.classList.add('hidden');
   imgPreviewElement.style.transform = 'scale(100%)';
@@ -44,9 +95,6 @@ noUiSlider.create(effectSliderElement, {
   connect: 'lower'
 });
 
-// Проверяем наличие модификатра с нужным эффектом
-const checkPresenceClass = (effects, currentPreview) => currentPreview.classList.contains(`effects__preview--${effects}`);
-
 // Добавляем CSS-стиль изображению
 const getStyleFilter = (value) => {
   imgPreviewElement.style.filter = value;
@@ -54,19 +102,25 @@ const getStyleFilter = (value) => {
 
 // Записываем свойства в переменную, в зависимости от класса модификатора у текущего элемента
 const setImageEffect = (currentPreview) => {
-  if (checkPresenceClass(NamesModifiers.CHROME, currentPreview)) {
-    filterName = Effects.GRAYSCALE;
-  } else if (checkPresenceClass(NamesModifiers.SEPIA, currentPreview)) {
-    filterName = Effects.SEPIA;
-  } else if (checkPresenceClass(NamesModifiers.MARVIN, currentPreview)) {
-    filterName = Effects.INVERT;
-  } else if (checkPresenceClass(NamesModifiers.PHOBOS, currentPreview)) {
-    filterName = Effects.BLUR;
-  } else if (checkPresenceClass(NamesModifiers.HEAT, currentPreview)) {
-    filterName = Effects.BRIGHTNESS;
-  } else {
-    filterName = Effects.NONE;
-    imgEffectLevelElement.classList.add('hidden');
+  switch (true) {
+    case currentPreview.value === NamesValues.CHROME:
+      filterName = Effects.GRAYSCALE;
+      break;
+    case currentPreview.value === NamesValues.SEPIA:
+      filterName = Effects.SEPIA;
+      break;
+    case currentPreview.value === NamesValues.MARVIN:
+      filterName = Effects.INVERT;
+      break;
+    case currentPreview.value === NamesValues.PHOBOS:
+      filterName = Effects.BLUR;
+      break;
+    case currentPreview.value === NamesValues.HEAT:
+      filterName = Effects.BRIGHTNESS;
+      break;
+    default:
+      filterName = Effects.NONE;
+      imgEffectLevelElement.classList.add('hidden');
   }
 };
 
@@ -86,55 +140,26 @@ effectSliderElement.noUiSlider.on('update', () => {
 
 // Меняем параметры слайдера в зависимости от значений свойства filter.
 const setEffectOtherPram = (currentPreview) => {
-  if (checkPresenceClass(NamesModifiers.PHOBOS, currentPreview)) {
-    effectSliderElement.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 3
-      },
-      start: 3,
-      step: 0.1
-    });
-  } else if (checkPresenceClass(NamesModifiers.HEAT, currentPreview)) {
-    effectSliderElement.noUiSlider.updateOptions({
-      range: {
-        min: 1,
-        max: 3,
-      },
-      start: 3,
-      step: 0.1
-    });
-  } else if (checkPresenceClass(NamesModifiers.MARVIN, currentPreview)) {
-    effectSliderElement.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 100,
-      },
-      start: 100,
-      step: 1
-    });
-  } else {
-    effectSliderElement.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 1,
-      },
-      step: 0.1,
-      start: 1,
-    });
-  }
+  const currentType = currentPreview.value;
+  effectSliderElement.noUiSlider.updateOptions({
+    range: {
+      min: filterData[currentType].range.min,
+      max: filterData[currentType].range.max
+    },
+    start: filterData[currentType].start,
+    step: filterData[currentType].step
+  });
 };
 
 // Обработчик клика превью с эффектами
 const onFilterPreviewClick = (evt) => {
-  const currentPreview = evt.target.closest('.effects__preview');
+  const currentPreview = evt.target.closest('.effects__radio');
 
   if (!currentPreview) {
     return;
   }
 
   imgEffectLevelElement.classList.remove('hidden');
-
   effectSliderElement.noUiSlider.reset();
   setImageEffect(currentPreview);
   setEffectOtherPram(currentPreview);
@@ -142,4 +167,4 @@ const onFilterPreviewClick = (evt) => {
 
 effectsListElement.addEventListener('click', onFilterPreviewClick);
 
-export { imgPreviewReset };
+export { resetImgPreview };
