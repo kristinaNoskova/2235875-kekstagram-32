@@ -1,4 +1,4 @@
-import { dataForPhoto } from './thumbnail-photos';
+import { getData } from './api.js';
 const COUNT_COMMENT = 5;
 
 const bigPictureElement = document.querySelector('.big-picture');
@@ -12,8 +12,14 @@ const commentShownCountElement = commentCountElement.querySelector('.social__com
 const commentsLoaderElement = bigPictureElement.querySelector('.comments-loader');
 let photoComments = [];
 let currentComment = 0;
+let dataForPhoto;
 
 const socialCommentsFragment = document.createDocumentFragment();
+
+getData()
+  .then((photos) => {
+    dataForPhoto = photos;
+  });
 
 const getIdPhoto = (currentPictureElement) => {
   const pictureDataset = currentPictureElement.dataset.id;

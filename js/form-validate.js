@@ -1,5 +1,9 @@
 import { isEscapeKey } from './util.js';
 import { resetImgPreview } from './filter-image.js';
+import { sendData } from './api.js';
+import { showTextSuccess } from './data-show-success.js';
+import { showTextError } from './data-show-error.js';
+
 
 const HASHTAG_REGXP = /^#[a-zя-яё0-9]{1,19}$/i;
 const HASHTAG_COUNT = 5;
@@ -26,7 +30,7 @@ const pristine = new Pristine(imgFormElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextTag: 'div',
-  errorTextClass: 'img-upload__error'
+  errorTextClass: 'img-upload__field-wrapper--error'
 });
 
 const validateComments = (value) => value.length <= 140;
@@ -60,12 +64,20 @@ pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LE
 pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 2, true);
 
 // Если валидация проходит, разрешаем отправку формы
-imgFormElement.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    evt.target.submit();
-  }
-});
+const setImgFormSubmit = (onSuccess) => {
+  imgFormElement.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      const formData = new FormData(evt.target);
+      sendData(formData)
+        .then(() => onSuccess())
+        .then(() => showTextSuccess())
+        .catch(() => showTextError());
+    }
+  });
+};
 
 const isFieldFocused = () => document.activeElement === textCommentsElement || document.activeElement === textHashtagsElement;
 
@@ -96,3 +108,5 @@ function onUploadOverlayClose() {
 imgInputElement.addEventListener('change', onUploadOverlayChange);
 
 imgCancelButtonElement.addEventListener('click', onUploadOverlayClose);
+
+export { setImgFormSubmit, onUploadOverlayClose };
