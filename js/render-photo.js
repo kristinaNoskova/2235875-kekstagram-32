@@ -12,18 +12,20 @@ const commentShownCountElement = commentCountElement.querySelector('.social__com
 const commentsLoaderElement = bigPictureElement.querySelector('.comments-loader');
 let photoComments = [];
 let currentComment = 0;
-let dataForPhoto;
+// let dataForPhoto;
+
+// getData()
+//   .then((photos) => {
+//     dataForPhoto = photos;
+//   });
 
 const socialCommentsFragment = document.createDocumentFragment();
 
-getData()
-  .then((photos) => {
-    dataForPhoto = photos;
-  });
+const photos = await getData();
 
 const getIdPhoto = (currentPictureElement) => {
   const pictureDataset = currentPictureElement.dataset.id;
-  const pictureId = dataForPhoto.find((el) => el.id === Number(pictureDataset));
+  const pictureId = photos.find((el) => el.id === Number(pictureDataset));
   return pictureId;
 };
 
