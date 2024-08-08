@@ -13,6 +13,11 @@ const TextError = {
   REPEAT: 'Такой хештег уже существует'
 };
 
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Опубликовываю...'
+};
+
 const picturesListElement = document.querySelector('.pictures');
 const imgFormElement = picturesListElement.querySelector('.img-upload__form');
 const imgOverlayElement = imgFormElement.querySelector('.img-upload__overlay');
@@ -20,10 +25,17 @@ const imgInputElement = imgFormElement.querySelector('.img-upload__input');
 const imgCancelButtonElement = imgFormElement.querySelector('.img-upload__cancel');
 const textCommentsElement = imgFormElement.querySelector('.text__description');
 const textHashtagsElement = imgFormElement.querySelector('.text__hashtags');
+const buttonSubmitElement = imgFormElement.querySelector('.img-upload__submit');
 
-imgFormElement.method = 'POST';
-imgFormElement.enctype = 'multipart/form-data';
-imgFormElement.action = 'https://32.javascript.htmlacademy.pro/kekstagram';
+const blockSubmitButton = () => {
+  buttonSubmitElement.disabled = true;
+  buttonSubmitElement.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  buttonSubmitElement.disabled = false;
+  buttonSubmitElement.textContent = SubmitButtonText.IDLE;
+};
 
 // Валидация формы
 const pristine = new Pristine(imgFormElement, {
@@ -40,7 +52,9 @@ const getNormalizedHashtags = (element) => element.trim().split(' ');
 // Проверяем на соответствие регулярному выражению
 const validateHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
-
+  if (value.length === 0) {
+    return true;
+  }
   return arrTags.every((element) => HASHTAG_REGXP.test(element));
 };
 
@@ -51,17 +65,18 @@ const checkLengthHashtags = (value) => {
   return arrTags.length <= HASHTAG_COUNT;
 };
 
-// Проверяем не повторяется ли теги
+// Проверяем не повторяются ли теги
 const checkRepeatHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
   const sortedArr = arrTags.slice().sort();
   return sortedArr[0] !== sortedArr[1];
+
 };
 
 pristine.addValidator(textCommentsElement, validateComments, 'Максимум 140 символов');
 pristine.addValidator(textHashtagsElement, validateHashtags, TextError.INVALID, 1, true);
-pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 3, true);
-pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 2, true);
+pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 2, true);
+pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 3, true);
 
 // Если валидация проходит, разрешаем отправку формы
 const setImgFormSubmit = (onSuccess) => {
@@ -71,10 +86,12 @@ const setImgFormSubmit = (onSuccess) => {
     const isValid = pristine.validate();
     if (isValid) {
       const formData = new FormData(evt.target);
+      blockSubmitButton();
       sendData(formData)
         .then(() => onSuccess())
         .then(() => showTextSuccess())
-        .catch(() => showTextError());
+        .catch(() => showTextError())
+        .finally(() => unblockSubmitButton());
     }
   });
 };
