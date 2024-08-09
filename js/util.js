@@ -1,25 +1,17 @@
-const getRandomInteger = (min, max) => {
-  const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
-  const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
-  const result = Math.random() * (upper - lower + 1) + lower;
+const ERR_SHOW_TIME = 5000;
 
-  return Math.floor(result);
-};
+const dataErrorTemplate = document.querySelector('#data-error').content;
+const sectionErrorElement = dataErrorTemplate.querySelector('.data-error');
+// const textErrorElement = sectionErrorElement.querySelector('.data-error__title');
 
-const getArrayElement = (elements) => {
-  const randomItem = elements[getRandomInteger(0, elements.length - 1)];
-  return randomItem;
-};
+const showTextError = () => {
+  document.body.append(sectionErrorElement);
 
-const createSerialNumber = () => {
-  let serialNumber = 0;
-
-  return () => {
-    serialNumber += 1;
-    return serialNumber;
-  };
+  setTimeout(() => {
+    sectionErrorElement.remove();
+  }, ERR_SHOW_TIME);
 };
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export { getRandomInteger, getArrayElement, createSerialNumber, isEscapeKey };
+export { isEscapeKey, showTextError };

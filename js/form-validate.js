@@ -1,5 +1,9 @@
-import { isEscapeKey } from './util.js';
+// import { isEscapeKey } from './util.js';
 import { resetImgPreview } from './filter-image.js';
+import { sendData } from './api.js';
+import { showTextSuccess } from './data-show-success.js';
+import { showTextError } from './data-show-error.js';
+
 
 const HASHTAG_REGXP = /^#[a-zя-яё0-9]{1,19}$/i;
 const HASHTAG_COUNT = 5;
@@ -9,24 +13,33 @@ const TextError = {
   REPEAT: 'Такой хештег уже существует'
 };
 
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Опубликовываю...'
+};
+
 const picturesListElement = document.querySelector('.pictures');
 const imgFormElement = picturesListElement.querySelector('.img-upload__form');
-const imgOverlayElement = imgFormElement.querySelector('.img-upload__overlay');
-const imgInputElement = imgFormElement.querySelector('.img-upload__input');
-const imgCancelButtonElement = imgFormElement.querySelector('.img-upload__cancel');
 const textCommentsElement = imgFormElement.querySelector('.text__description');
 const textHashtagsElement = imgFormElement.querySelector('.text__hashtags');
+const buttonSubmitElement = imgFormElement.querySelector('.img-upload__submit');
 
-imgFormElement.method = 'POST';
-imgFormElement.enctype = 'multipart/form-data';
-imgFormElement.action = 'https://32.javascript.htmlacademy.pro/kekstagram';
+const blockSubmitButton = () => {
+  buttonSubmitElement.disabled = true;
+  buttonSubmitElement.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  buttonSubmitElement.disabled = false;
+  buttonSubmitElement.textContent = SubmitButtonText.IDLE;
+};
 
 // Валидация формы
 const pristine = new Pristine(imgFormElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextTag: 'div',
-  errorTextClass: 'img-upload__error'
+  errorTextClass: 'img-upload__field-wrapper--error'
 });
 
 const validateComments = (value) => value.length <= 140;
@@ -36,7 +49,9 @@ const getNormalizedHashtags = (element) => element.trim().split(' ');
 // Проверяем на соответствие регулярному выражению
 const validateHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
-
+  if (value.length === 0) {
+    return true;
+  }
   return arrTags.every((element) => HASHTAG_REGXP.test(element));
 };
 
@@ -47,7 +62,7 @@ const checkLengthHashtags = (value) => {
   return arrTags.length <= HASHTAG_COUNT;
 };
 
-// Проверяем не повторяется ли теги
+// Проверяем не повторяются ли теги
 const checkRepeatHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
   const sortedArr = arrTags.slice().sort();
@@ -56,43 +71,51 @@ const checkRepeatHashtags = (value) => {
 
 pristine.addValidator(textCommentsElement, validateComments, 'Максимум 140 символов');
 pristine.addValidator(textHashtagsElement, validateHashtags, TextError.INVALID, 1, true);
-pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 3, true);
-pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 2, true);
+pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 2, true);
+pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 3, true);
 
 // Если валидация проходит, разрешаем отправку формы
-imgFormElement.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    evt.target.submit();
-  }
-});
+// const setImgFormSubmit = (onSuccess) => {
+//   imgFormElement.addEventListener('submit', (evt) => {
+//     evt.preventDefault();
 
-const isFieldFocused = () => document.activeElement === textCommentsElement || document.activeElement === textHashtagsElement;
-
-// Обработчики для открытия/закрытия формы
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt) && !isFieldFocused()) {
+//     const isValid = pristine.validate();
+//     if (isValid) {
+//       const formData = new FormData(evt.target);
+//       blockSubmitButton();
+//       sendData(formData)
+//         .then(() => onSuccess())
+//         .then(() => showTextSuccess())
+//         .catch(() => showTextError())
+//         .finally(() => unblockSubmitButton());
+//     }
+//   });
+// };
+const setImgFormSubmit = async (onSuccess) => {
+  imgFormElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
-    onUploadOverlayClose();
-  }
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      const formData = new FormData(evt.target);
+      blockSubmitButton();
+      try {
+        await sendData(formData);
+        onSuccess();
+        showTextSuccess();
+      } catch (error) {
+        showTextError(error.message);
+      } finally {
+        unblockSubmitButton();
+      }
+    }
+  });
 };
 
-const onUploadOverlayChange = () => {
-  imgOverlayElement.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-
-  document.addEventListener('keydown', onDocumentKeydown);
-};
-
-function onUploadOverlayClose() {
-  imgOverlayElement.classList.add('hidden');
-  document.body.classList.remove('modal-open');
+const resetForm = () => {
   resetImgPreview();
   imgFormElement.reset();
   pristine.reset();
-  document.removeEventListener('keydown', onDocumentKeydown);
-}
+};
 
-imgInputElement.addEventListener('change', onUploadOverlayChange);
-
-imgCancelButtonElement.addEventListener('click', onUploadOverlayClose);
+export { setImgFormSubmit, resetForm };

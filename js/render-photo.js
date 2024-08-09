@@ -1,4 +1,5 @@
-import { dataForPhoto } from './thumbnail-photos';
+import { getState } from './state.js';
+
 const COUNT_COMMENT = 5;
 
 const bigPictureElement = document.querySelector('.big-picture');
@@ -17,6 +18,7 @@ const socialCommentsFragment = document.createDocumentFragment();
 
 const getIdPhoto = (currentPictureElement) => {
   const pictureDataset = currentPictureElement.dataset.id;
+  const dataForPhoto = getState('data');
   const pictureId = dataForPhoto.find((el) => el.id === Number(pictureDataset));
   return pictureId;
 };
