@@ -1,4 +1,4 @@
-import { isEscapeKey } from './util.js';
+// import { isEscapeKey } from './util.js';
 import { resetImgPreview } from './filter-image.js';
 import { sendData } from './api.js';
 import { showTextSuccess } from './data-show-success.js';
@@ -20,9 +20,6 @@ const SubmitButtonText = {
 
 const picturesListElement = document.querySelector('.pictures');
 const imgFormElement = picturesListElement.querySelector('.img-upload__form');
-const imgOverlayElement = imgFormElement.querySelector('.img-upload__overlay');
-const imgInputElement = imgFormElement.querySelector('.img-upload__input');
-const imgCancelButtonElement = imgFormElement.querySelector('.img-upload__cancel');
 const textCommentsElement = imgFormElement.querySelector('.text__description');
 const textHashtagsElement = imgFormElement.querySelector('.text__hashtags');
 const buttonSubmitElement = imgFormElement.querySelector('.img-upload__submit');
@@ -70,7 +67,6 @@ const checkRepeatHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
   const sortedArr = arrTags.slice().sort();
   return sortedArr[0] !== sortedArr[1];
-
 };
 
 pristine.addValidator(textCommentsElement, validateComments, 'Максимум 140 символов');
@@ -79,51 +75,47 @@ pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LE
 pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 3, true);
 
 // Если валидация проходит, разрешаем отправку формы
-const setImgFormSubmit = (onSuccess) => {
-  imgFormElement.addEventListener('submit', (evt) => {
+// const setImgFormSubmit = (onSuccess) => {
+//   imgFormElement.addEventListener('submit', (evt) => {
+//     evt.preventDefault();
+
+//     const isValid = pristine.validate();
+//     if (isValid) {
+//       const formData = new FormData(evt.target);
+//       blockSubmitButton();
+//       sendData(formData)
+//         .then(() => onSuccess())
+//         .then(() => showTextSuccess())
+//         .catch(() => showTextError())
+//         .finally(() => unblockSubmitButton());
+//     }
+//   });
+// };
+const setImgFormSubmit = async (onSuccess) => {
+  imgFormElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
     if (isValid) {
       const formData = new FormData(evt.target);
       blockSubmitButton();
-      sendData(formData)
-        .then(() => onSuccess())
-        .then(() => showTextSuccess())
-        .catch(() => showTextError())
-        .finally(() => unblockSubmitButton());
+      try {
+        await sendData(formData);
+        onSuccess();
+        showTextSuccess();
+      } catch (error) {
+        showTextError(error.message);
+      } finally {
+        unblockSubmitButton();
+      }
     }
   });
 };
 
-const isFieldFocused = () => document.activeElement === textCommentsElement || document.activeElement === textHashtagsElement;
-
-// Обработчики для открытия/закрытия формы
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt) && !isFieldFocused()) {
-    evt.preventDefault();
-    onUploadOverlayClose();
-  }
-};
-
-const onUploadOverlayChange = () => {
-  imgOverlayElement.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-
-  document.addEventListener('keydown', onDocumentKeydown);
-};
-
-function onUploadOverlayClose() {
-  imgOverlayElement.classList.add('hidden');
-  document.body.classList.remove('modal-open');
+const resetForm = () => {
   resetImgPreview();
   imgFormElement.reset();
   pristine.reset();
-  document.removeEventListener('keydown', onDocumentKeydown);
-}
+};
 
-imgInputElement.addEventListener('change', onUploadOverlayChange);
-
-imgCancelButtonElement.addEventListener('click', onUploadOverlayClose);
-
-export { setImgFormSubmit, onUploadOverlayClose };
+export { setImgFormSubmit, resetForm };

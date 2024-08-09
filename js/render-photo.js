@@ -1,4 +1,5 @@
-import { getData } from './api.js';
+import { getState } from './state.js';
+
 const COUNT_COMMENT = 5;
 
 const bigPictureElement = document.querySelector('.big-picture');
@@ -12,20 +13,13 @@ const commentShownCountElement = commentCountElement.querySelector('.social__com
 const commentsLoaderElement = bigPictureElement.querySelector('.comments-loader');
 let photoComments = [];
 let currentComment = 0;
-// let dataForPhoto;
-
-// getData()
-//   .then((photos) => {
-//     dataForPhoto = photos;
-//   });
 
 const socialCommentsFragment = document.createDocumentFragment();
 
-const photos = await getData();
-
 const getIdPhoto = (currentPictureElement) => {
   const pictureDataset = currentPictureElement.dataset.id;
-  const pictureId = photos.find((el) => el.id === Number(pictureDataset));
+  const dataForPhoto = getState('data');
+  const pictureId = dataForPhoto.find((el) => el.id === Number(pictureDataset));
   return pictureId;
 };
 
