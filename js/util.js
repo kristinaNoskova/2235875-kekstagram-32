@@ -2,7 +2,6 @@ const ERR_SHOW_TIME = 5000;
 
 const dataErrorTemplate = document.querySelector('#data-error').content;
 const sectionErrorElement = dataErrorTemplate.querySelector('.data-error');
-// const textErrorElement = sectionErrorElement.querySelector('.data-error__title');
 
 const showTextError = () => {
   document.body.append(sectionErrorElement);
@@ -14,4 +13,12 @@ const showTextError = () => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export { isEscapeKey, showTextError };
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { isEscapeKey, showTextError, debounce };
