@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { resetForm } from './form-validate.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png', 'webp'];
 const picturesListElement = document.querySelector('.pictures');
 
 const imgFormElement = picturesListElement.querySelector('.img-upload__form');
@@ -9,6 +10,7 @@ const imgInputElement = imgFormElement.querySelector('.img-upload__input');
 const imgCancelButtonElement = imgFormElement.querySelector('.img-upload__cancel');
 const textCommentsElement = imgFormElement.querySelector('.text__description');
 const textHashtagsElement = imgFormElement.querySelector('.text__hashtags');
+const imgPreviewElement = imgFormElement.querySelector('.img-upload__preview img');
 
 const isFieldFocused = () => document.activeElement === textCommentsElement || document.activeElement === textHashtagsElement;
 
@@ -23,6 +25,15 @@ const onDocumentKeydown = (evt) => {
 const onUploadOverlayChange = () => {
   imgOverlayElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
+
+  const file = imgInputElement.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const ending = FILE_TYPES.some((el) => fileName.endsWith(el));
+
+  if (ending) {
+    imgPreviewElement.src = URL.createObjectURL(file);
+  }
 
   document.addEventListener('keydown', onDocumentKeydown);
 };
