@@ -1,6 +1,15 @@
 import './modal.js';
 import { updateScaleValue } from './scale-image.js';
-import { renderThumbnailPhoto, getRandomPhotos, sortByCommentsLength, removeHiddenInFilters, setRandomPhotos, setDefaultPhotos, setSortPhotos } from './thumbnail-photos.js';
+import {
+  renderThumbnailPhoto,
+  getRandomPhotos,
+  sortByCommentsLength,
+  removeHiddenInFilters,
+  setRandomPhotos,
+  setDefaultPhotos,
+  setSortPhotos,
+  getDefaultPhotos
+} from './thumbnail-photos.js';
 import './filter-image.js';
 import { showTextError, debounce } from './util.js';
 import { setImgFormSubmit } from './form-validate.js';
@@ -13,11 +22,12 @@ const RERENDER_DELAY = 500;
 
 try {
   const photo = await getData();
+  removeHiddenInFilters();
+  renderThumbnailPhoto(photo);
   setState('data', photo);
   const randomPhoto = getRandomPhotos(photo);
   const sortPhoto = sortByCommentsLength(photo);
-  removeHiddenInFilters();
-  renderThumbnailPhoto(photo);
+  const defaultPhoto = getDefaultPhotos(photo);
   setRandomPhotos(debounce(
     () => renderThumbnailPhoto(randomPhoto),
     RERENDER_DELAY,
@@ -27,7 +37,7 @@ try {
     RERENDER_DELAY,
   ));
   setDefaultPhotos(debounce(
-    () => renderThumbnailPhoto(photo),
+    () => renderThumbnailPhoto(defaultPhoto),
     RERENDER_DELAY,
   ));
 } catch {

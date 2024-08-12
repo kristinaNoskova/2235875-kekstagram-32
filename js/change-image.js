@@ -11,6 +11,7 @@ const imgCancelButtonElement = imgFormElement.querySelector('.img-upload__cancel
 const textCommentsElement = imgFormElement.querySelector('.text__description');
 const textHashtagsElement = imgFormElement.querySelector('.text__hashtags');
 const imgPreviewElement = imgFormElement.querySelector('.img-upload__preview img');
+const effectsPreviewElement = document.querySelectorAll('.effects__preview');
 
 const isFieldFocused = () => document.activeElement === textCommentsElement || document.activeElement === textHashtagsElement;
 
@@ -33,7 +34,11 @@ const onUploadOverlayChange = () => {
 
   if (ending) {
     imgPreviewElement.src = URL.createObjectURL(file);
+    effectsPreviewElement.forEach((element) => {
+      element.style.backgroundImage = `url("${imgPreviewElement.src}")`;
+    });
   }
+
 
   document.addEventListener('keydown', onDocumentKeydown);
 };

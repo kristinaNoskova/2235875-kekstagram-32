@@ -5,7 +5,7 @@ import { showTextSuccess } from './data-show-success.js';
 import { showTextError } from './data-show-error.js';
 
 
-const HASHTAG_REGXP = /^#[a-zя-яё0-9]{1,19}$/i;
+const HASHTAG_REGXP = /^#[a-zя-яёйц0-9]{1,19}$/i;
 const HASHTAG_COUNT = 5;
 const TextError = {
   MAX_LENGTH: 'Максимум 5 хештегов',
@@ -44,7 +44,12 @@ const pristine = new Pristine(imgFormElement, {
 
 const validateComments = (value) => value.length <= 140;
 
-const getNormalizedHashtags = (element) => element.trim().split(' ');
+// const getNormalizedHashtags = (element) => element.trim().split(' ');
+const getNormalizedHashtags = (element) => element
+  .trim()
+  .split(' ')
+  .filter((tag) => Boolean(tag.length));
+
 
 // Проверяем на соответствие регулярному выражению
 const validateHashtags = (value) => {
@@ -66,32 +71,20 @@ const checkLengthHashtags = (value) => {
 const checkRepeatHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
   const sortedArr = arrTags.slice().sort();
-  return sortedArr[0] !== sortedArr[1];
+  const lowercased = sortedArr.map((item) => item.toLowerCase());
+  if (value.length === 0) {
+    return true;
+  }
+
+  return lowercased[0] !== lowercased[1];
 };
 
 pristine.addValidator(textCommentsElement, validateComments, 'Максимум 140 символов');
 pristine.addValidator(textHashtagsElement, validateHashtags, TextError.INVALID, 1, true);
-pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 2, true);
-pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 3, true);
+pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 3, true);
+pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 2, true);
 
-// Если валидация проходит, разрешаем отправку формы
-// const setImgFormSubmit = (onSuccess) => {
-//   imgFormElement.addEventListener('submit', (evt) => {
-//     evt.preventDefault();
-
-//     const isValid = pristine.validate();
-//     if (isValid) {
-//       const formData = new FormData(evt.target);
-//       blockSubmitButton();
-//       sendData(formData)
-//         .then(() => onSuccess())
-//         .then(() => showTextSuccess())
-//         .catch(() => showTextError())
-//         .finally(() => unblockSubmitButton());
-//     }
-//   });
-// };
-const setImgFormSubmit = async (onSuccess) => {
+const setImgFormSubmit = (onSuccess) => {
   imgFormElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
@@ -110,7 +103,19 @@ const setImgFormSubmit = async (onSuccess) => {
       }
     }
   });
+  //   const isValid = pristine.validate();
+  //   if (isValid) {
+  //     const formData = new FormData(evt.target);
+  //     blockSubmitButton();
+  //     sendData(formData)
+  //       .then(() => onSuccess())
+  //       .then(() => showTextSuccess())
+  //       .catch(() => showTextError())
+  //       .finally(() => unblockSubmitButton());
+  //   }
+  // });
 };
+
 
 const resetForm = () => {
   resetImgPreview();
