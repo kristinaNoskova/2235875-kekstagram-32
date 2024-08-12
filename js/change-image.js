@@ -15,7 +15,6 @@ const effectsPreviewElement = document.querySelectorAll('.effects__preview');
 
 const isFieldFocused = () => document.activeElement === textCommentsElement || document.activeElement === textHashtagsElement;
 
-// Обработчики для открытия/закрытия формы
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt) && !isFieldFocused()) {
     evt.preventDefault();
@@ -38,7 +37,6 @@ const onUploadOverlayChange = () => {
       element.style.backgroundImage = `url("${imgPreviewElement.src}")`;
     });
   }
-
 
   document.addEventListener('keydown', onDocumentKeydown);
 };

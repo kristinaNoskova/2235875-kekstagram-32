@@ -1,4 +1,3 @@
-// import { isEscapeKey } from './util.js';
 import { resetImgPreview } from './filter-image.js';
 import { sendData } from './api.js';
 import { showTextSuccess } from './data-show-success.js';
@@ -34,7 +33,6 @@ const unblockSubmitButton = () => {
   buttonSubmitElement.textContent = SubmitButtonText.IDLE;
 };
 
-// Валидация формы
 const pristine = new Pristine(imgFormElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -44,14 +42,11 @@ const pristine = new Pristine(imgFormElement, {
 
 const validateComments = (value) => value.length <= 140;
 
-// const getNormalizedHashtags = (element) => element.trim().split(' ');
 const getNormalizedHashtags = (element) => element
   .trim()
   .split(' ')
   .filter((tag) => Boolean(tag.length));
 
-
-// Проверяем на соответствие регулярному выражению
 const validateHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
   if (value.length === 0) {
@@ -60,14 +55,12 @@ const validateHashtags = (value) => {
   return arrTags.every((element) => HASHTAG_REGXP.test(element));
 };
 
-// Проверяем чтоб длина масиива не привышала HASHTAG_COUNT
 const checkLengthHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
 
   return arrTags.length <= HASHTAG_COUNT;
 };
 
-// Проверяем не повторяются ли теги
 const checkRepeatHashtags = (value) => {
   const arrTags = getNormalizedHashtags(value);
   const sortedArr = arrTags.slice().sort();
@@ -84,38 +77,26 @@ pristine.addValidator(textHashtagsElement, validateHashtags, TextError.INVALID, 
 pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 3, true);
 pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 2, true);
 
-const setImgFormSubmit = (onSuccess) => {
+const setImgFormSubmit = async (onSuccess) => {
   imgFormElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
     if (isValid) {
-      const formData = new FormData(evt.target);
+      const formData = new FormData(imgFormElement);
       blockSubmitButton();
       try {
         await sendData(formData);
         onSuccess();
         showTextSuccess();
-      } catch (error) {
-        showTextError(error.message);
+      } catch (err) {
+        showTextError(err.message);
       } finally {
         unblockSubmitButton();
       }
     }
   });
-  //   const isValid = pristine.validate();
-  //   if (isValid) {
-  //     const formData = new FormData(evt.target);
-  //     blockSubmitButton();
-  //     sendData(formData)
-  //       .then(() => onSuccess())
-  //       .then(() => showTextSuccess())
-  //       .catch(() => showTextError())
-  //       .finally(() => unblockSubmitButton());
-  //   }
-  // });
 };
-
 
 const resetForm = () => {
   resetImgPreview();

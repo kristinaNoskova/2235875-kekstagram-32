@@ -106,12 +106,10 @@ noUiSlider.create(effectSliderElement, {
   },
 });
 
-// Добавляем CSS-стиль изображению
 const getStyleFilter = (value) => {
   imgPreviewElement.style.filter = value;
 };
 
-// Записываем свойства в переменную, в зависимости от класса модификатора у текущего элемента
 const setImageEffect = (currentPreview) => {
   switch (true) {
     case currentPreview.value === NamesValues.CHROME:
@@ -135,7 +133,6 @@ const setImageEffect = (currentPreview) => {
   }
 };
 
-// Подставляем значения слайдера, в зависимости от фльтра добавляем единицы измерения
 effectSliderElement.noUiSlider.on('update', () => {
   effectLevelValueElement.value = effectSliderElement.noUiSlider.get();
   if (filterName === Effects.INVERT) {
@@ -149,7 +146,6 @@ effectSliderElement.noUiSlider.on('update', () => {
   }
 });
 
-// Меняем параметры слайдера в зависимости от значений свойства filter.
 const setEffectOtherPram = (currentPreview) => {
   const currentType = currentPreview.value;
   effectSliderElement.noUiSlider.updateOptions({
@@ -162,7 +158,6 @@ const setEffectOtherPram = (currentPreview) => {
   });
 };
 
-// Обработчик клика превью с эффектами
 const onFilterPreviewClick = (evt) => {
   const currentPreview = evt.target.closest('.effects__radio');
 
