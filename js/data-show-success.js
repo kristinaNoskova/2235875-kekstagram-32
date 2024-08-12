@@ -19,15 +19,13 @@ const onDocumentClick = (evt) => {
 };
 
 const showTextSuccess = () => {
-  sectionSuccessElement.classList.remove('hidden');
-
   document.body.append(sectionSuccessElement);
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
 };
 
 function onSuccessCloseClick() {
-  sectionSuccessElement.classList.add('hidden');
+  sectionSuccessElement.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
 }

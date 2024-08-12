@@ -30,15 +30,12 @@ const renderThumbnailPhoto = (dataPhoto) => {
 
 const compareСomments = (elementA, elementB) => elementB.comments.length - elementA.comments.length;
 
-const sortByCommentsLength = (dataPhoto) => {
-  dataPhoto.sort(compareСomments);
-  return dataPhoto;
-};
+const sortByCommentsLength = (dataPhoto) => dataPhoto.slice().sort(compareСomments);
 
-const getRandomPhotos = (dataPhoto) => {
-  const randomElements = dataPhoto.slice(0, 10).sort(() => Math.random() - 0.5);
-  return randomElements;
-};
+const getDefaultPhotos = (dataPhoto) => dataPhoto.slice().sort((a, b) => a.id - b.id);
+
+const getRandomPhotos = (dataPhoto) => dataPhoto.slice(0, 10).sort(() => Math.random() - 0.5);
+
 
 const removeHiddenInFilters = () => {
   imgFiltersElement.classList.remove('img-filters--inactive');
@@ -77,6 +74,7 @@ export {
   removeHiddenInFilters,
   setRandomPhotos,
   setSortPhotos,
-  setDefaultPhotos
+  setDefaultPhotos,
+  getDefaultPhotos
 };
 

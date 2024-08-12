@@ -20,15 +20,14 @@ const onDocumentClick = (evt) => {
 };
 
 const showTextError = () => {
-  sectionErrorElement.classList.remove('hidden');
-
   document.body.append(sectionErrorElement);
   document.body.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
 };
 
 function onErrCloseClick() {
-  sectionErrorElement.classList.add('hidden');
+  sectionErrorElement.remove();
+
   document.body.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
 }
