@@ -15,6 +15,7 @@ const load = (route, method = Method.GET, body = null) =>
       if (!response.ok) {
         throw new Error(`${response.status}: ${response.statusText}`);
       }
+
       return response.json();
     })
     .catch((err) => {

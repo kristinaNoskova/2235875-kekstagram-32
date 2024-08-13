@@ -3,7 +3,7 @@ const ERR_SHOW_TIME = 5000;
 const dataErrorTemplate = document.querySelector('#data-error').content;
 const sectionErrorElement = dataErrorTemplate.querySelector('.data-error');
 
-const showTextError = () => {
+const showTextErrors = () => {
   document.body.append(sectionErrorElement);
 
   setTimeout(() => {
@@ -21,4 +21,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export { isEscapeKey, showTextError, debounce };
+export { isEscapeKey, showTextErrors, debounce };

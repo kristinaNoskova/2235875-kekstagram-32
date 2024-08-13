@@ -77,7 +77,7 @@ pristine.addValidator(textHashtagsElement, validateHashtags, TextError.INVALID, 
 pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 3, true);
 pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 2, true);
 
-const setImgFormSubmit = async (onSuccess) => {
+const setImgFormSubmit = (onSuccess) => {
   imgFormElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
