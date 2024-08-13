@@ -87,11 +87,11 @@ const resetImgPreview = () => {
 
 noUiSlider.create(effectSliderElement, {
   range: {
-    min: 0,
-    max: 1,
+    min: filterData.none.range.min,
+    max: filterData.none.range.max,
   },
-  step: 0.1,
-  start: 1,
+  step: filterData.none.step,
+  start: filterData.none.start,
   connect: 'lower',
   format: {
     to: function (value) {

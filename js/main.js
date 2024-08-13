@@ -17,8 +17,9 @@ import { onUploadOverlayClose } from './change-image.js';
 import { getData } from './api.js';
 import { setState } from './state.js';
 
-updateScaleValue();
 const RERENDER_DELAY = 500;
+updateScaleValue();
+
 
 try {
   const photo = await getData();
