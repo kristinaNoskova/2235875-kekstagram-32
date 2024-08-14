@@ -1,7 +1,7 @@
 import { isEscapeKey } from './util.js';
 
-const dataErrorTemplate = document.querySelector('#error').content;
-const sectionErrorElement = dataErrorTemplate.querySelector('.error');
+const errorTemplateElement = document.querySelector('#error').content;
+const sectionErrorElement = errorTemplateElement.querySelector('.error');
 const innerErrorElement = sectionErrorElement.querySelector('.error__inner');
 const buttonErrorElement = sectionErrorElement.querySelector('.error__button');
 

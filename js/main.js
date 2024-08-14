@@ -27,12 +27,11 @@ const getDataPhotos = async () => {
     renderThumbnailPhoto(photo);
     setState('data', photo);
 
-    const randomPhoto = getRandomPhotos(photo);
     const sortPhoto = sortByCommentsLength(photo);
     const defaultPhoto = getDefaultPhotos(photo);
 
     setRandomPhotos(debounce(
-      () => renderThumbnailPhoto(randomPhoto),
+      () => renderThumbnailPhoto(getRandomPhotos(photo)),
       RERENDER_DELAY));
     setSortPhotos(debounce(
       () => renderThumbnailPhoto(sortPhoto),

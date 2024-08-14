@@ -6,6 +6,7 @@ import { showTextError } from './data-show-error.js';
 
 const HASHTAG_REGXP = /^#[a-zя-яёйц0-9]{1,19}$/i;
 const HASHTAG_COUNT = 5;
+const MAX_LENGTH_COMMENT = 140;
 const TextError = {
   MAX_LENGTH: 'Максимум 5 хештегов',
   INVALID: 'Хештег должен начинаться с # и включать буквы и цифры',
@@ -15,6 +16,12 @@ const TextError = {
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
   SENDING: 'Опубликовываю...'
+};
+
+const ValidateSequence = {
+  FIRST: 1,
+  SECOND: 2,
+  THIRD: 3,
 };
 
 const picturesListElement = document.querySelector('.pictures');
@@ -40,7 +47,7 @@ const pristine = new Pristine(imgFormElement, {
   errorTextClass: 'img-upload__field-wrapper--error'
 });
 
-const validateComments = (value) => value.length <= 140;
+const validateComments = (value) => value.length <= MAX_LENGTH_COMMENT;
 
 const getNormalizedHashtags = (element) => element
   .trim()
@@ -73,9 +80,9 @@ const checkRepeatHashtags = (value) => {
 };
 
 pristine.addValidator(textCommentsElement, validateComments, 'Максимум 140 символов');
-pristine.addValidator(textHashtagsElement, validateHashtags, TextError.INVALID, 1, true);
-pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, 3, true);
-pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, 2, true);
+pristine.addValidator(textHashtagsElement, validateHashtags, TextError.INVALID, ValidateSequence.FIRST, true);
+pristine.addValidator(textHashtagsElement, checkLengthHashtags, TextError.MAX_LENGTH, ValidateSequence.THIRD, true);
+pristine.addValidator(textHashtagsElement, checkRepeatHashtags, TextError.REPEAT, ValidateSequence.SECOND, true);
 
 const setImgFormSubmit = (onSuccess) => {
   imgFormElement.addEventListener('submit', async (evt) => {

@@ -1,8 +1,8 @@
 import { isEscapeKey } from './util.js';
 
-const dataSuccessTemplate = document.querySelector('#success').content;
-const sectionSuccessElement = dataSuccessTemplate.querySelector('.success');
-const innerSuccessElement = dataSuccessTemplate.querySelector('.success__inner');
+const successTemplateElement = document.querySelector('#success').content;
+const sectionSuccessElement = successTemplateElement.querySelector('.success');
+const innerSuccessElement = successTemplateElement.querySelector('.success__inner');
 const buttonSuccessElement = sectionSuccessElement.querySelector('.success__button');
 
 const onDocumentKeydown = (evt) => {

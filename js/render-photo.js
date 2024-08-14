@@ -42,6 +42,23 @@ const renderComments = (comment) => {
   });
 };
 
+const onMoreButtonClick = () => {
+  const commentsSlice = photoComments.slice(currentComment, currentComment + COUNT_COMMENT);
+
+  if (commentsSlice.length > 0) {
+    renderComments(commentsSlice);
+    socialCommentsElement.append(socialCommentsFragment);
+    commentsLoaderElement.classList.remove('hidden');
+
+    currentComment += commentsSlice.length;
+    commentShownCountElement.textContent = currentComment;
+  }
+
+  if (currentComment >= photoComments.length) {
+    commentsLoaderElement.classList.add('hidden');
+  }
+};
+
 const displaysInitialComments = () => {
   onMoreButtonClick();
 };
@@ -58,23 +75,6 @@ const renderPhoto = (currentPictureElement) => {
   photoComments = pictureId.comments;
   displaysInitialComments();
 };
-
-function onMoreButtonClick() {
-  const commentsSlice = photoComments.slice(currentComment, currentComment + COUNT_COMMENT);
-
-  if (commentsSlice.length > 0) {
-    renderComments(commentsSlice);
-    socialCommentsElement.append(socialCommentsFragment);
-    commentsLoaderElement.classList.remove('hidden');
-
-    currentComment += commentsSlice.length;
-    commentShownCountElement.textContent = currentComment;
-  }
-
-  if (currentComment >= photoComments.length) {
-    commentsLoaderElement.classList.add('hidden');
-  }
-}
 
 export { renderPhoto, onMoreButtonClick };
 
