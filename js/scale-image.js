@@ -12,7 +12,8 @@ const imgPreviewElement = imgFormElement.querySelector('.img-upload__preview img
 const setScaleValue = (value) => {
   const scaleValue = value / VALUE_DIVISOR;
   imgPreviewElement.style.transform = `scale(${scaleValue})`;
-  controlValueElement.value = `${value}%`;
+
+  controlValueElement.setAttribute('value', `${value}%`);
 };
 
 const updateScaleValue = () => {
