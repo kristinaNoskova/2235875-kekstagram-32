@@ -78,7 +78,6 @@ const controlValueElement = imgFormElement.querySelector('.scale__control--value
 
 let filterName;
 
-// effectLevelValueElement.value = 1;
 imgEffectLevelElement.classList.add('hidden');
 
 const resetImgPreview = () => {
@@ -162,6 +161,7 @@ const onFilterPreviewClick = (evt) => {
   }
 
   imgEffectLevelElement.classList.remove('hidden');
+
   setImageEffect(currentPreview);
   setEffectOtherPram(currentPreview);
 };
