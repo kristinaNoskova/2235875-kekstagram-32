@@ -2,7 +2,7 @@ import { resetImgPreview } from './filter-image.js';
 import { sendData } from './api.js';
 import { showTextSuccess } from './data-show-success.js';
 import { showTextError } from './data-show-error.js';
-
+import Pristine from 'pristinejs';
 
 const HASHTAG_REGXP = /^#[a-zя-яёйц0-9]{1,19}$/i;
 const HASHTAG_COUNT = 5;
