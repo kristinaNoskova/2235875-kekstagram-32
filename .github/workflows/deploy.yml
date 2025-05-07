@@ -1,9 +1,9 @@
-# .github/workflows/deploy.yml
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master # или main, в зависимости от ветки
 
 jobs:
   build-and-deploy:
