@@ -1,3 +1,6 @@
+import noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
+
 const NamesValues = {
   NONE: 'none',
   CHROME: 'chrome',
