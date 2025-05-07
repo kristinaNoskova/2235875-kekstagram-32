@@ -24,5 +24,5 @@
 - **Асинхронность** — `async/await`  
 - **Валидация формы** — [Pristine.js](https://github.com/posabsolute/Pristine)  
 - **Рейндж-слайдер** — [noUiSlider](https://github.com/miljko/noUiSlider)  
-- **Обработка данных** — `slice`, `sort`, `forEach` и др.  
+- **Обработка данных** — массивы и объекты (`slice`, `sort`, `forEach`, деструктуризация и др.) 
 - **DOM-шаблоны** — генерация блоков через `<template>`
