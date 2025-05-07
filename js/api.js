@@ -21,17 +21,6 @@ const load = async (route, method = Method.GET, body = null) => {
   }
   return await response.json();
 };
-// fetch(`${BASE_URL}${route}`, { method, body })
-//   .then((response) => {
-//     if (!response.ok) {
-//       throw new Error(`${response.status}: ${response.statusText}`);
-//     }
-
-//     return response.json();
-//   })
-//   .catch((err) => {
-//     throw new Error(err.message);
-//   });
 
 const getData = () => load(Route.GET_DATA);
 

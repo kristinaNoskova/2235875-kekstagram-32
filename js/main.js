@@ -1,3 +1,6 @@
+import '../vendor/pristine/pristine.min.js';
+import '../vendor/nouislider/nouislider.js';
+
 import './modal.js';
 import { updateScaleValue } from './scale-image.js';
 import {
